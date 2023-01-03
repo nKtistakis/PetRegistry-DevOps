@@ -1,0 +1,24 @@
+---
+- name: install apache2 scenario
+  hosts: all
+  become: true
+  tasks:
+
+  #TASK 1
+  - name: install apache2
+    apt:
+      name: apache2
+      state: present
+      update_cache: yes 
+  #TASK 2
+  - name: start server
+    service:
+      name: apache2
+      state: started
+      enabled: yes
+  #TASK 3
+  - name: create directory
+    file: 
+      path: /home/azureuser/testProject
+      state: directory
+

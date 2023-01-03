@@ -1,0 +1,62 @@
+---
+- name: Deploy project
+  hosts: target
+  become: true
+
+
+  tasks:
+
+    - name: npm init react
+      npm:
+        path: /home/azureuser/ansible-deploy-frontend
+        state: latest
+
+    - name : build frontend
+      shell:
+        'npm run build'
+      args:
+        chdir: /home/azureuser/ansible-deploy-frontend
+
+    - name : replace nginx.conf (delete)
+      file:
+        path: /etc/nginx/nginx.conf
+        state: absent
+
+    - name : replace nginx.conf (copy file)
+      copy:
+        src:  /home/azureuser/ansible-deploy-frontend/nginx/nginx.conf
+        dest: /etc/nginx/nginx.conf
+        remote_src: yes
+
+    - name : replace sites-available/default (delete)
+      file:
+        path: /etc/nginx/sites-available/default
+        state: absent
+
+    - name : replace sites-available/default (copy)
+      copy:
+        src:  /home/azureuser/ansible-deploy-frontend/nginx/default
+        dest: /etc/nginx/sites-available/default
+        remote_src: yes
+
+    - name : restart nginx service
+      service:
+        name: nginx
+        state: restarted
+
+    - name: Build project
+      shell: 
+        mvn clean package
+      args:
+        chdir: /home/azureuser/ansible-deploy-backend
+
+    - name: Deploy backend
+      shell:
+        nohup java -jar target/rest-api.war &
+      args:
+        chdir: /home/azureuser/ansible-deploy-backend
+    
+    
+    
+
+

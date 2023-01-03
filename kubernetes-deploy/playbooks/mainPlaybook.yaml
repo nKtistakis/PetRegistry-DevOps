@@ -1,0 +1,14 @@
+---
+- name: Kubernetes Deploy
+  hosts: all
+
+  tasks:
+    - debug:
+        msg: play1
+
+- name: Initing project playbook
+  import_playbook: initProject.yaml
+
+- name: Deploying with docker compose
+  import_playbook: deployProject.yaml
+

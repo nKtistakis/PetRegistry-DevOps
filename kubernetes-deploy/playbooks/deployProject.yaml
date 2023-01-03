@@ -1,0 +1,38 @@
+---
+- name: Deploy project
+  hosts: all
+  become: true
+  gather_facts: false
+
+  tasks:
+
+    - name: npm init react
+      npm:
+        path: /home/azureuser/kubernetes-deploy-frontend
+        state: latest
+    
+    - name: Docker compose
+      docker_compose:
+        project_src: /home/azureuser/kubernetes-deploy-backend
+        build: true
+    
+    - name: Docker push Backend
+      shell:
+        'sudo docker push brightdeanz/devops-spring-server'
+        
+    - name: Docker push Frontend
+      shell:
+        'sudo docker push brightdeanz/devops-react-server'
+    
+    - name: Restart microk8s
+      shell:
+        'sudo microk8s stop && sudo microk8s start'
+    
+    - name: Setup k8s entities 
+      shell:
+        './k8s-apply2.sh'
+      args:
+        chdir: /home/azureuser/kubernetes-deploy-backend
+    
+
+

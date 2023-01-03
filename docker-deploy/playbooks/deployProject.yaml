@@ -1,0 +1,22 @@
+---
+- name: Deploy project
+  hosts: all
+  become: true
+  gather_facts: false
+
+  tasks:
+
+    - name: npm init react
+      npm:
+        path: /home/azureuser/docker-deploy-frontend
+        state: latest
+    
+    - name: Docker compose
+      docker_compose:
+        project_src: /home/azureuser/docker-deploy-backend
+        build: true
+    
+    
+    
+
+

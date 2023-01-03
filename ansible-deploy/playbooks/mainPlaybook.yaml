@@ -1,0 +1,17 @@
+---
+- name: Ansible Deploy
+  hosts: target
+
+  tasks:
+    - debug:
+        msg: play1
+
+- name: Initing project
+  import_playbook: initProject.yaml
+
+- name: Seting up the MySQL database server
+  import_playbook: setupDatabase.yaml
+
+- name: Deploying front and back 
+  import_playbook: deployProject.yaml
+

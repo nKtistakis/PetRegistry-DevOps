@@ -1,0 +1,62 @@
+---
+- name: install dependecies
+  hosts: all
+  become: true
+
+  roles:
+    - role: gantsign.maven
+      maven_version: '3.8.6'
+
+
+  tasks:
+    - name: install packages
+      apt: pkg={{ item }} state=latest update_cache=yes
+      with_items:
+      - python3
+      - git
+      - docker.io
+      - docker-compose
+      - openjdk-17-jdk
+      - curl    
+
+    - name: download latest node
+      shell:
+        curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+
+    - name: install latest node
+      apt:
+        name: nodejs
+        state: present
+      
+    - name: fetch backend
+      git:
+        repo: git@github.com:it21712/devops-back-db.git
+        key_file: /home/azureuser/.ssh/id_rsa
+        dest: /home/azureuser/docker-deploy-backend
+        version: docker-deploy
+        clone: yes
+        accept_hostkey: yes
+        force: yes
+
+    - name: fetch frontend
+      git:
+        repo: git@github.com:nKtist/ds_frontend_react.git
+        key_file: /home/azureuser/.ssh/id_rsa
+        dest: /home/azureuser/docker-deploy-frontend
+        version: docker-deploy
+        clone: yes
+        accept_hostkey: yes
+        force: yes
+
+      
+
+
+
+
+
+
+                
+                
+
+    
+    
