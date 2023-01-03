@@ -23,10 +23,9 @@ Command:
 - _ansible-playbook docker-deploy/playbooks/mainPlaybook.yaml -i hosts -e "targetMachine= 'YOUR_HOST_IP'"_
 
 
+**Although the ansible playbooks can be ran mannualy, it recommended to set up a Jenkins server following the instructions:**
 
-#### Although the ansible playbooks can be ran mannualy, it recommended to set up a Jenkins server following the instructions:
-
-### Jenkins Instructions
+## Jenkins Instructions
 
 #### Step 1
 - Set up a Jenkins server and add the appropriate keys
